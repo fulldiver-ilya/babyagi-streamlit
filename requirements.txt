@@ -100,3 +100,4 @@ watchdog
 wheel
 yarl
 zipp
+python-dotenv

@@ -1,4 +1,5 @@
 from collections import deque
+import os
 from typing import Dict, List, Optional
 from langchain import LLMChain, OpenAI, PromptTemplate
 from langchain.embeddings import HuggingFaceEmbeddings
@@ -6,8 +7,8 @@ from langchain.llms import BaseLLM
 from langchain.vectorstores import FAISS
 from langchain.vectorstores.base import VectorStore
 from pydantic import BaseModel, Field
+from dotenv import load_dotenv
 import streamlit as st
-
 class TaskCreationChain(LLMChain):
     @classmethod
     def from_llm(cls, llm: BaseLLM, objective: str, verbose: bool = True) -> LLMChain:
@@ -242,19 +243,18 @@ class BabyAGI(BaseModel):
 
 
 def main():
+    load_dotenv()
+
     st.set_page_config(
         initial_sidebar_state="expanded",
         page_title="BabyAGI Streamlit",
         layout="centered",
     )
-
-    with st.sidebar:
-        openai_api_key = st.text_input('Your OpenAI API KEY', type="password")
-
+    
     st.title("BabyAGI Streamlit")
     objective = st.text_input("Input Ultimate goal", "Solve world hunger")
     first_task = st.text_input("Input Where to start", "Develop a task list")
-    max_iterations = st.number_input("Max iterations", value=3, min_value=1, step=1)
+    max_iterations = st.number_input("Max iterations", value=10, min_value=1, step=1)
     button = st.button("Run")
 
     embedding_model = HuggingFaceEmbeddings()
@@ -262,6 +262,8 @@ def main():
 
     if button:
         try:
+            openai_api_key = os.getenv("OPENAI_KEY")
+
             baby_agi = BabyAGI.from_llm_and_objectives(
                 llm=OpenAI(openai_api_key=openai_api_key),
                 vectorstore=vectorstore,
