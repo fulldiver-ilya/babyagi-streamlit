@@ -118,7 +118,7 @@ class Message:
 
     def __init__(self, label: str):
         message_area, icon_area = st.columns([10, 1])
-        icon_area.image(self.ai_icon, caption="AIWAYZ")
+        icon_area.image(self.ai_icon, caption="AIWIZE")
 
         # Expander
         self.exp = message_area.expander(label=label, expanded=True)
@@ -247,11 +247,11 @@ def main():
 
     st.set_page_config(
         initial_sidebar_state="expanded",
-        page_title="AIWAYZ",
+        page_title="AIWIZE",
         layout="centered",
     )
     
-    st.title("AIWAYZ")
+    st.title("AIWIZE")
     objective = st.text_input("Input Ultimate goal", "Solve world hunger")
     first_task = st.text_input("Input Where to start", "Develop a task list")
     max_iterations = st.number_input("Max iterations", value=10, min_value=1, step=1)
